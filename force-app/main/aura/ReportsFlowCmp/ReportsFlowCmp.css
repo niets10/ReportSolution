@@ -1,0 +1,16 @@
+.THIS .navigation {
+    min-width: 225px;
+    border-right: 1px solid #e7e7e7;
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+.THIS .slds-text-heading_small{
+    /* //padding-left: 10px; */
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e7e7e7;
+}
+
+.THIS .itemSeparation {
+    border-bottom: 1px solid #e7e7e7;
+}
