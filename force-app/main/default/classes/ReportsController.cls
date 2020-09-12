@@ -1,13 +1,14 @@
 /**
  @Name: ReportsController.cls
  @TestedBy: ReportsController_Test.cls
- @Other classes used:
+ @Other classes used: GetObjectFields.cls
  @Description: Description:
     APEX custom controller to be called from ReportsFlowCmp.
 
  @History
   VERSION     AUTHOR           DATE            DETAIL
-  1.0         Álvaro Nieto     10/9/2020     First version
+  1.0         Álvaro Nieto     10/9/2020       First version
+  1.1         Álvaro Nieto     12/09/2020      Add method to get all the fields of the object dynamically
 */
 
 public class ReportsController {
@@ -128,8 +129,12 @@ public class ReportsController {
            
         }
 
+        //Get ObjectAPIName from metadata and its fields using Schema.getGlobalDescribe();
         String objectApiName = cmd.ObjectAPIName__c;
-        String query = 'SELECT Id, Name FROM ' + objectApiName + ' WHERE Id IN: relevantIds';
+        List<String> fieldApiNames = GetObjectFields.getFieldsForObject(objectApiName);
+        String stringFields = String.join(fieldApiNames, ',');
+
+        String query = 'SELECT ' + stringFields + ' FROM ' + objectApiName + ' WHERE Id IN: relevantIds';
 
         List<sObject> listOfSobjects = Database.query(query);
 

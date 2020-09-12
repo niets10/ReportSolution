@@ -1,0 +1,78 @@
+<aura:component controller="ReportsController" implements="flexipage:availableForAllPageTypes,force:appHostable" access="global">
+
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="reports" type="List"/>
+    <aura:attribute name="report" type="Report"/>
+    <aura:attribute name="objects" type="List"/>
+    <aura:attribute name="flows" type="List"/>
+    <aura:attribute name="reportDeveloperName" type="String"/>
+    <aura:attribute name="flowDeveloperName" type="String"/>
+    <aura:attribute name="showFlowMenu" type="Boolean"/>
+    <aura:attribute name="url" type="String"/>
+
+    <lightning:navigation aura:id="nav" />
+    
+    <lightning:layout>
+        <!-- ############### REPORTS SECTION ############### -->
+        <lightning:layoutItem class="navigation">
+            <div style="width: 320px;">
+                <lightning:verticalNavigation onselect="{!c.onSelection}" >
+                    <lightning:verticalNavigationSection label="Available Reports">
+                        <lightning:input type="search" aura:id="nameFilter" onchange="{!c.handleNameFilterChange}" placeholder="Search" variant="label-hidden"/>
+                        <aura:iteration items="{!v.reports}" var ="report">
+        
+                            <lightning:verticalNavigationItemIcon class="itemSeparation" label="{!report.Name}" name="{!report.DeveloperName}" iconName="utility:groups"/>
+                        </aura:iteration>
+                    </lightning:verticalNavigationSection>
+                </lightning:verticalNavigation>
+            </div>
+        </lightning:layoutItem>
+
+        <!-- ############### FLOWS SECTION ############### -->
+        <aura:if isTrue="{!v.showFlowMenu}">
+            <lightning:layoutItem aura:id="flowSection" class="navigation">
+                <div style="width: 280px;">
+                    <lightning:verticalNavigation onselect="{!c.onSelectionFlow}">
+                        <lightning:verticalNavigationSection label="Available Flows">
+
+                            <aura:if isTrue="{!v.flows.length > 0}">
+
+                                <div class="slds-text-heading_small">Selected report: 
+                                    <span>
+                                        <a href="{!v.url}" onclick="{!c.navigateToRecord}" target="_blank">{!v.report.Name}</a>
+                                    </span>
+                                </div>
+
+                                <aura:iteration items="{!v.flows}" var ="flow">    
+                                    <lightning:verticalNavigationItemIcon class="itemSeparation" label="{!flow}" name="{!flow}" iconName="action:flow"/>
+                                </aura:iteration>
+                                <aura:set attribute="else">
+                                    <div class="slds-text-heading_small">Selected report:
+                                        <span>
+                                            <a href="{!v.url}" onclick="{!c.navigateToRecord}" target="_blank">{!v.report.Name}</a>
+                                        </span>
+                                    </div>
+                                    <div class="slds-text-heading_small">
+                                    There are not flows configured for this report :(
+                                    </div>
+                                </aura:set>
+                            </aura:if>
+
+                        </lightning:verticalNavigationSection>
+                    </lightning:verticalNavigation>
+                </div>
+            </lightning:layoutItem>
+        </aura:if>
+
+        <lightning:layoutItem aura:id="flowLayout">
+           <!--  <lightning:flow aura:id="reportFlow" onstatuschange="{!c.handleStatusChange}"/> -->
+           {!v.body}
+        </lightning:layoutItem>
+    </lightning:layout>
+
+            
+    
+
+
+</aura:component>
